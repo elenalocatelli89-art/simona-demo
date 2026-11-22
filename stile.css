@@ -617,3 +617,42 @@ section { padding: 84px 22px; }
 /* le tappe in alto mettono il nome sopra il punto */
 .tappa[data-i="0"] .tappa-nome { top: auto; bottom: 44px; }
 .fasi-pannelli { max-width: 640px; margin: 50px auto 0; }
+
+/* --- Figure del cerchio: scelta per numero di tappa --- */
+.ciclo .ft { opacity: 0; transform: scale(.7) rotate(-12deg); }
+.ciclo[data-tappa="0"] .ft[data-i="0"], .ciclo[data-tappa="1"] .ft[data-i="1"], .ciclo[data-tappa="2"] .ft[data-i="2"],
+.ciclo[data-tappa="3"] .ft[data-i="3"], .ciclo[data-tappa="4"] .ft[data-i="4"], .ciclo[data-tappa="5"] .ft[data-i="5"] { opacity: 1; transform: none; }
+.ft circle:not(.ft-pieno) { fill: none; }
+.ft-piedini circle, .ciclo .ft circle[r="2.6"], .ciclo .ft circle[r="2.4"], .ciclo .ft circle[r="2.2"], .ciclo .ft circle[r="2"], .ciclo .ft circle[r="1.8"] { fill: var(--bosco); stroke: none; }
+
+/* --- La card collegata al cerchio --- */
+.fasi-pannelli { position: relative; margin-top: 34px; }
+.fasi-pannelli::before { /* linguetta che punta al cerchio */
+  content: ""; position: absolute; left: 50%; top: -12px; width: 24px; height: 24px; margin-left: -12px;
+  background: var(--chiaro); transform: rotate(45deg); border-radius: 4px; box-shadow: -4px -4px 10px rgba(60, 40, 20, .04);
+}
+.pannello { position: relative; border-top: 5px solid var(--accento2); }
+.pannello-testa { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.pannello-figura { width: 54px; height: 54px; flex: none; border-radius: 50%; background: var(--sfondo); display: grid; place-items: center; }
+.figura-piccola { width: 40px; height: 40px; overflow: visible; }
+.figura-piccola * { fill: none; stroke: var(--bosco); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.figura-piccola .ft-pieno { fill: var(--cipria); stroke: var(--accento2); stroke-width: 2; }
+.figura-piccola circle[r="2.6"], .figura-piccola circle[r="2.4"], .figura-piccola circle[r="2.2"], .figura-piccola circle[r="2"], .figura-piccola circle[r="1.8"] { fill: var(--bosco); stroke: none; }
+.pannello-tappa { flex: 1; font: 600 .7rem var(--font-testo); letter-spacing: .12em; text-transform: uppercase; color: var(--tenue); line-height: 1.2; }
+.pannello-tappa b { display: block; font: italic 400 1.35rem var(--font-titoli); letter-spacing: 0; text-transform: none; color: var(--accento2); }
+.pannello-frecce { display: flex; gap: 6px; }
+.freccia {
+  width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--sfondo2); background: var(--chiaro);
+  font: 1.5rem/1 var(--font-titoli); color: var(--bosco); cursor: pointer; padding: 0 0 3px; transition: background .2s, transform .2s;
+}
+.freccia:active { transform: scale(.9); background: var(--cipria); }
+.pannello-pallini { display: flex; gap: 6px; margin: 4px 0 14px; }
+.pannello-pallini i { width: 8px; height: 8px; border-radius: 50%; background: var(--sfondo2); transition: width .3s, background .3s; }
+.pannello-pallini i.on { width: 22px; border-radius: 999px; background: var(--accento2); }
+/* quando cambia tappa la card entra da un lato */
+.pannello.da-destra { animation: da-destra .5s cubic-bezier(.2, .8, .2, 1) both; }
+.pannello.da-sinistra { animation: da-sinistra .5s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes da-destra { from { opacity: 0; transform: translateX(40px); } }
+@keyframes da-sinistra { from { opacity: 0; transform: translateX(-40px); } }
+@media (max-width: 520px) { .pannello-tappa b { font-size: 1.15rem; } .freccia { width: 36px; height: 36px; } }
+.figura-piccola .ft { opacity: 1 !important; transform: none !important; }

@@ -34,13 +34,42 @@
   var tappe = document.querySelectorAll('.tappa');
   var pannelli = document.querySelectorAll('.pannello');
   var giroAuto = null;
-  function vaiTappa(i) {
+  var attuale = 0;
+  function vaiTappa(i, daUtente) {
+    var n = tappe.length;
+    i = (i + n) % n;
+    var verso = i >= attuale ? 'da-destra' : 'da-sinistra';
+    attuale = i;
     ciclo.dataset.tappa = i;
     tappe.forEach(function (x) { x.classList.toggle('attiva', x.dataset.i == i); x.classList.toggle('fatta', Number(x.dataset.i) <= i); });
-    pannelli.forEach(function (p) { p.hidden = p.dataset.i != i; });
+    pannelli.forEach(function (p) {
+      var on = p.dataset.i == i;
+      p.hidden = !on;
+      p.classList.remove('da-destra', 'da-sinistra');
+      if (on) { void p.offsetWidth; p.classList.add(verso); }
+    });
+    // sul telefono la scheda può essere fuori schermo: la porto in vista con dolcezza
+    if (daUtente) {
+      var p = document.querySelector('.pannello[data-i="' + i + '"]');
+      var r = p.getBoundingClientRect();
+      if (r.top > innerHeight - 160) window.scrollBy({ top: r.top - innerHeight + 260, behavior: 'smooth' });
+    }
   }
   tappe.forEach(function (tp) {
-    tp.addEventListener('click', function () { clearInterval(giroAuto); vaiTappa(Number(tp.dataset.i)); });
+    tp.addEventListener('click', function () { clearInterval(giroAuto); vaiTappa(Number(tp.dataset.i), true); });
+  });
+  // frecce e scorrimento con il dito sulla scheda
+  document.querySelectorAll('.freccia').forEach(function (f) {
+    f.addEventListener('click', function () { clearInterval(giroAuto); vaiTappa(attuale + Number(f.dataset.vai)); });
+  });
+  var xInizio = null;
+  var box = document.querySelector('.fasi-pannelli');
+  box.addEventListener('touchstart', function (e) { xInizio = e.touches[0].clientX; }, { passive: true });
+  box.addEventListener('touchend', function (e) {
+    if (xInizio === null) return;
+    var dx = e.changedTouches[0].clientX - xInizio;
+    if (Math.abs(dx) > 50) { clearInterval(giroAuto); vaiTappa(attuale + (dx < 0 ? 1 : -1)); }
+    xInizio = null;
   });
   // la prima volta il cerchio si percorre da solo e si chiude, poi torna all'inizio
   if (!calmo) {
