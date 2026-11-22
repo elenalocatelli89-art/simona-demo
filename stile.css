@@ -565,3 +565,55 @@ section { padding: 84px 22px; }
 .sg-centro > span { opacity: clamp(0, calc((var(--p) - .82) * 6), 1); transform: translateY(calc((1 - var(--p)) * 14px)); }
 .logo-unione { animation: none !important; }
 .sguardi-scena.unite .logo-unione { animation: respira-logo 5s 1s ease-in-out infinite !important; }
+
+/* =========================================================
+   Il cerchio del percorso (al posto della pianta)
+   ========================================================= */
+.ciclo { --w: min(360px, 86vw); position: relative; width: var(--w); height: var(--w); margin: 34px auto 10px; }
+.ciclo-anello { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.ca-base { fill: none; stroke: var(--sfondo2); stroke-width: 10; }
+.ca-giro {
+  fill: none; stroke: var(--accento2); stroke-width: 10; stroke-linecap: round;
+  stroke-dasharray: 741.4; stroke-dashoffset: 617.8; transition: stroke-dashoffset .9s cubic-bezier(.5, .1, .2, 1);
+}
+.ciclo[data-tappa="1"] .ca-giro { stroke-dashoffset: 494.3; }
+.ciclo[data-tappa="2"] .ca-giro { stroke-dashoffset: 370.7; }
+.ciclo[data-tappa="3"] .ca-giro { stroke-dashoffset: 247.1; }
+.ciclo[data-tappa="4"] .ca-giro { stroke-dashoffset: 123.6; }
+.ciclo[data-tappa="5"] .ca-giro { stroke-dashoffset: 0; }
+/* quando il giro si chiude: un battito dell'anello */
+.ciclo.chiuso .ca-giro { stroke: var(--bosco); }
+.ciclo.chiuso .ciclo-centro { transform: translate(-50%, -50%) scale(1.08); }
+
+.ciclo-centro {
+  position: absolute; left: 50%; top: 50%; width: 50%; height: 50%; transform: translate(-50%, -50%);
+  border-radius: 50%; background: var(--chiaro); box-shadow: var(--ombra);
+  display: grid; place-items: center; transition: transform .5s cubic-bezier(.3, 1.5, .5, 1);
+}
+.figure-tappe { width: 72%; height: 72%; overflow: visible; }
+.ft { opacity: 0; transform: scale(.7) rotate(-12deg); transform-origin: 50px 50px; transition: opacity .5s, transform .6s cubic-bezier(.3, 1.4, .5, 1); }
+.ft * { fill: none; stroke: var(--bosco); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.ft .ft-pieno { fill: var(--cipria); stroke: var(--accento2); stroke-width: 1.6; }
+.ciclo[data-tappa="0"] .ft-seme, .ciclo[data-tappa="1"] .ft-pancia, .ciclo[data-tappa="2"] .ft-mani,
+.ciclo[data-tappa="3"] .ft-neonato, .ciclo[data-tappa="4"] .ft-pappa, .ciclo[data-tappa="5"] .ft-bambino { opacity: 1; transform: none; }
+
+.tappa {
+  position: absolute; left: 50%; top: 50%; border: 0; background: none; padding: 0; cursor: pointer; font: inherit; color: var(--testo);
+  transform: translate(-50%, -50%) rotate(var(--a)) translateX(calc(var(--w) * .393)) rotate(calc(var(--a) * -1));
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.tappa-punto {
+  width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--chiaro); border: 2px solid var(--sfondo2); font: italic 1.15rem var(--font-titoli); color: var(--tenue);
+  transition: background .4s, color .4s, border-color .4s, transform .4s;
+}
+.tappa.fatta .tappa-punto { background: var(--cipria); border-color: var(--accento2); color: var(--bosco); }
+.tappa.attiva .tappa-punto { background: var(--accento2); color: var(--chiaro); transform: scale(1.18); box-shadow: 0 0 0 6px rgba(200, 105, 63, .18); }
+.tappa-nome {
+  position: absolute; top: 44px; white-space: nowrap; font: 600 .78rem var(--font-testo);
+  background: rgba(247, 241, 232, .9); padding: 1px 6px; border-radius: 999px;
+}
+.tappa.attiva .tappa-nome { color: var(--accento2); }
+/* le tappe in alto mettono il nome sopra il punto */
+.tappa[data-i="0"] .tappa-nome { top: auto; bottom: 44px; }
+.fasi-pannelli { max-width: 640px; margin: 50px auto 0; }

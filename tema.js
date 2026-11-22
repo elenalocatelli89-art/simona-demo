@@ -29,17 +29,34 @@
   }, { threshold: 0.3 });
   document.querySelectorAll('.ramo').forEach(function (r) { io.observe(r); });
 
-  // 3. Dove sei adesso: cambia pannello
-  var fasi = document.querySelectorAll('.fase');
+  // 3. Il cerchio del percorso: tocchi una tappa, l'anello si colora fino a lì, al centro cambia la figura
+  var ciclo = document.querySelector('.ciclo');
+  var tappe = document.querySelectorAll('.tappa');
   var pannelli = document.querySelectorAll('.pannello');
-  fasi.forEach(function (f) {
-    f.addEventListener('click', function () {
-      fasi.forEach(function (x) { x.classList.toggle('attiva', x === f); x.setAttribute('aria-selected', x === f); });
-      pannelli.forEach(function (p) { p.hidden = p.dataset.i !== f.dataset.i; });
-      var pianta = document.querySelector('.fasi-pianta');
-      pianta.className = 'fasi-pianta fase-' + f.dataset.i;
-    });
+  var giroAuto = null;
+  function vaiTappa(i) {
+    ciclo.dataset.tappa = i;
+    tappe.forEach(function (x) { x.classList.toggle('attiva', x.dataset.i == i); x.classList.toggle('fatta', Number(x.dataset.i) <= i); });
+    pannelli.forEach(function (p) { p.hidden = p.dataset.i != i; });
+  }
+  tappe.forEach(function (tp) {
+    tp.addEventListener('click', function () { clearInterval(giroAuto); vaiTappa(Number(tp.dataset.i)); });
   });
+  // la prima volta il cerchio si percorre da solo e si chiude, poi torna all'inizio
+  if (!calmo) {
+    new IntersectionObserver(function (v, o) {
+      if (!v[0].isIntersecting) return;
+      o.disconnect();
+      var i = 0;
+      giroAuto = setInterval(function () {
+        i++;
+        if (i < tappe.length) { vaiTappa(i); return; }
+        clearInterval(giroAuto);
+        ciclo.classList.add('chiuso');
+        setTimeout(function () { ciclo.classList.remove('chiuso'); vaiTappa(0); }, 1600);
+      }, 1100);
+    }, { threshold: 0.5 }).observe(ciclo);
+  }
 
   // 4. Due sguardi: avvicinando i cerchi compare Simona
   var cur = document.querySelector('.sguardi-cursore');
@@ -129,14 +146,4 @@
       document.body.appendChild(s);
     });
   });
-})();
-
-// La pianta parte dal seme quando la sezione entra nello schermo
-(function () {
-  var p = document.querySelector('.fasi-pianta');
-  new IntersectionObserver(function (v, o) {
-    if (!v[0].isIntersecting) return;
-    o.disconnect();
-    if (!/fase-/.test(p.className)) setTimeout(function () { p.classList.add('fase-0'); }, 300);
-  }, { threshold: 0.4 }).observe(p);
 })();
