@@ -700,3 +700,19 @@ section { padding: 84px 22px; }
 .prenota::before { display: none; }
 .ig-cta b { white-space: nowrap; }
 @media (max-width: 400px) { .ig-cta span { flex-direction: column; gap: 0; } }
+
+/* --- Piè di pagina color sabbia, staccato dalla prenotazione verde --- */
+.piede { background: var(--sfondo2); color: var(--tenue); border-top: 6px solid var(--cipria); }
+.piede strong, .piede a { color: var(--bosco); }
+.ramo-piede path { stroke: var(--bosco); }
+
+/* --- Instagram: colori di Instagram, misura piccola --- */
+.ig-cta {
+  background: linear-gradient(100deg, #f58529, #dd2a7b 45%, #8134af 80%); background-size: 160% 100%;
+  color: #fff; border: 0; box-shadow: 0 8px 20px rgba(221, 42, 123, .22); padding: 11px 22px 11px 14px;
+}
+.ig-cta:hover { background: linear-gradient(100deg, #f58529, #dd2a7b 45%, #8134af 80%); background-size: 160% 100%; background-position: 100% 0; }
+.ig-cta svg { stroke: #fff; }
+.ig-cta svg circle:last-child { fill: #fff; }
+.ig-cta span { color: rgba(255, 255, 255, .9); }
+@media (max-width: 640px) { .ramo-piede { display: none; } }
