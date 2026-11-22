@@ -656,3 +656,47 @@ section { padding: 84px 22px; }
 @keyframes da-sinistra { from { opacity: 0; transform: translateX(-40px); } }
 @media (max-width: 520px) { .pannello-tappa b { font-size: 1.15rem; } .freccia { width: 36px; height: 36px; } }
 .figura-piccola .ft { opacity: 1 !important; transform: none !important; }
+
+/* =========================================================
+   Prenotazione: la chiamata più importante della pagina
+   ========================================================= */
+.prenota {
+  background:
+    radial-gradient(circle at 85% 10%, rgba(240, 201, 184, .18) 0 120px, transparent 121px),
+    radial-gradient(circle at 10% 90%, rgba(168, 184, 154, .16) 0 160px, transparent 161px),
+    var(--bosco);
+  color: var(--sfondo); padding-top: 90px; padding-bottom: 100px; position: relative; overflow: hidden;
+}
+.prenota h2 { color: var(--chiaro); font-size: clamp(2.4rem, 9vw, 3.6rem); margin-bottom: .2em; }
+.prenota > .nota { color: var(--salvia); font-size: 1.05rem; }
+.prenota::before { /* il logo grande, appena accennato, sullo sfondo */
+  content: ""; position: absolute; right: -40px; top: 30px; width: 220px; height: 220px; opacity: .08;
+  background: url("logo.svg") center/contain no-repeat; filter: grayscale(1) brightness(3);
+}
+.prenota-scheda {
+  max-width: 600px; padding: 32px 26px; border-radius: 30px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, .28), 0 0 0 6px rgba(240, 201, 184, .25);
+  color: var(--testo);
+}
+.prenota-scheda .scelta { padding: 18px 20px; font-size: 1.05rem; }
+.prenota-scheda .scelta:hover { background: color-mix(in srgb, var(--cipria) 35%, var(--sfondo)); }
+.prenota-scheda .btn { width: 100%; padding: 17px; font-size: 1.05rem; }
+.prenota-rassicura { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; margin: 22px auto 0; max-width: 600px; font-size: .9rem; color: var(--salvia); list-style: none; padding: 0; }
+.prenota-rassicura li::before { content: "✓ "; color: var(--cipria); font-weight: 600; }
+/* il pulsante fisso in basso pulsa piano finché non si arriva alla prenotazione */
+.btn-fisso { animation: richiamo 2.6s ease-in-out infinite; }
+@keyframes richiamo { 0%, 100% { box-shadow: 0 8px 22px rgba(200, 105, 63, .35); } 50% { box-shadow: 0 8px 22px rgba(200, 105, 63, .35), 0 0 0 10px rgba(200, 105, 63, .15); } }
+
+/* --- Instagram: invito più piccolo e sobrio --- */
+.ig-cta {
+  background: var(--chiaro); color: var(--testo); box-shadow: none; border: 2px solid var(--sfondo2);
+  padding: 10px 20px 10px 12px; gap: 10px; margin-top: 22px;
+}
+.ig-cta:hover { background: var(--chiaro); border-color: #dd2a7b; transform: translateY(-2px); }
+.ig-cta svg { width: 28px; height: 28px; stroke: #dd2a7b; }
+.ig-cta svg circle:last-child { fill: #dd2a7b; }
+.ig-cta b { font: 600 .95rem var(--font-testo); }
+.ig-cta span { font-size: .8rem; color: var(--tenue); flex-direction: row; gap: 6px; align-items: baseline; }
+.prenota::before { display: none; }
+.ig-cta b { white-space: nowrap; }
+@media (max-width: 400px) { .ig-cta span { flex-direction: column; gap: 0; } }
