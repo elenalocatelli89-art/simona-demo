@@ -127,12 +127,36 @@
     }, { threshold: 0.6 }).observe(scena);
   }
 
-  // 5. Carte da girare; sul retro il tocco porta alla prenotazione
+  // 5. Carte: si aprono a tutta larghezza, perché le risposte sono lunghe; sul retro il tocco porta al contatto
+  function chiudi(c) { c.setAttribute('aria-pressed', 'false'); c.style.height = ''; }
+  function misura(c) { c.style.height = c.querySelector('.carta-retro').scrollHeight + 'px'; }
   document.querySelectorAll('.carta').forEach(function (c) {
-    c.addEventListener('click', function () {
-      if (c.getAttribute('aria-pressed') === 'true') { document.getElementById('prenota').scrollIntoView({ behavior: 'smooth' }); return; }
-      document.querySelectorAll('.carta[aria-pressed="true"]').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+    c.addEventListener('click', function (e) {
+      if (c.getAttribute('aria-pressed') === 'true') {
+        if (e.target.closest('.retro-cta')) document.getElementById('contatto').scrollIntoView({ behavior: 'smooth' });
+        else chiudi(c);
+        return;
+      }
+      document.querySelectorAll('.carta[aria-pressed="true"]').forEach(chiudi);
       c.setAttribute('aria-pressed', 'true');
+      misura(c);
+      c.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+  addEventListener('resize', function () { document.querySelectorAll('.carta[aria-pressed="true"]').forEach(misura); });
+
+  // 5b. Medicina cinese: tocchi un elemento, yin e yang gira verso di lui e sotto leggi stagione e sapore
+  var elementi = Array.prototype.slice.call(document.querySelectorAll('.elemento'));
+  var yy = document.querySelector('.mtc-yy');
+  var mtc = document.querySelector('.mtc');
+  elementi.forEach(function (el, i) {
+    el.addEventListener('click', function () {
+      elementi.forEach(function (x) { x.classList.toggle('attivo', x === el); });
+      yy.style.transform = 'translate(-50%, -50%) rotate(' + (i * 72) + 'deg)';
+      mtc.style.setProperty('--col', getComputedStyle(el).getPropertyValue('--col'));
+      document.querySelector('.mtc-dice b').textContent = el.dataset.nome;
+      document.querySelector('.m-stagione').textContent = el.dataset.stagione;
+      document.querySelector('.m-sapore').textContent = el.dataset.sapore;
     });
   });
 
